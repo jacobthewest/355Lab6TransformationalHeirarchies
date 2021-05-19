@@ -9,6 +9,13 @@ class Lab6Renderer(Renderer):
     zpos = -20
     theta = 0
     ortho = False
+    carx = -20
+    cary = -4
+    carz = -15
+    wheely = -3
+    wheelOffsetWidth = 2.5
+    wheelOffsetLength = 2
+    tireAngle = 0
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,6 +50,9 @@ class Lab6Renderer(Renderer):
             self.ypos = 0
             self.zpos = -20
             self.theta = 0
+            self.tireAngle = 0
+            self.carx = -20
+
 
     def get_projection(self):  # Gets the projection matrix
 
@@ -152,19 +162,85 @@ class Lab6Renderer(Renderer):
         self.drawBackHouse()
         self.drawBackRightHouse()
 
-    def drawHouse(self, house):
-        # Push
-        self.push_model_matrix(np.eye(4))
-        # concatonate(houseTransform[house])
-        houseTransform = np.matmul(house, )
-        # drawHouse
-        # Pop
+    def drawFrontLeftTire(self):
+        tireTranslation = np.array([[1, 0, 0, self.carx + self.wheelOffsetLength],
+                                    [0, 1, 0, self.wheely],
+                                    [0, 0, 1, self.carz + self.wheelOffsetWidth],
+                                    [0, 0, 0, 1]])
+        tireRotation = np.array([[np.cos(-self.tireAngle), -np.sin(-self.tireAngle), 0, 0],
+                                 [np.sin(-self.tireAngle), np.cos(-self.tireAngle), 0, 0],
+                                 [0, 0, 1, 0],
+                                 [0, 0, 0, 1]])
+        combo = np.matmul(tireTranslation, tireRotation)
+        self.push_model_matrix(np.transpose(combo))
+        self.tire.render(self.get_model_matrix(), color=np.array([0, 0, 255]))
         self.pop_model_matrix()
-        pass
+
+    def drawFrontRightTire(self):
+        tireTranslation = np.array([[1, 0, 0, self.carx + self.wheelOffsetLength],
+                                    [0, 1, 0, self.wheely],
+                                    [0, 0, 1, self.carz - self.wheelOffsetWidth],
+                                    [0, 0, 0, 1]])
+        tireRotation = np.array([[np.cos(-self.tireAngle), -np.sin(-self.tireAngle), 0, 0],
+                                 [np.sin(-self.tireAngle), np.cos(-self.tireAngle), 0, 0],
+                                 [0, 0, 1, 0],
+                                 [0, 0, 0, 1]])
+        combo = np.matmul(tireTranslation, tireRotation)
+        self.push_model_matrix(np.transpose(combo))
+        self.tire.render(self.get_model_matrix(), color=np.array([0, 0, 255]))
+        self.pop_model_matrix()
+
+    def drawBackLeftTire(self):
+        tireTranslation = np.array([[1, 0, 0, self.carx - self.wheelOffsetLength],
+                                    [0, 1, 0, self.wheely],
+                                    [0, 0, 1, self.carz + self.wheelOffsetWidth],
+                                    [0, 0, 0, 1]])
+        tireRotation = np.array([[np.cos(-self.tireAngle), -np.sin(-self.tireAngle), 0, 0],
+                                 [np.sin(-self.tireAngle), np.cos(-self.tireAngle), 0, 0],
+                                 [0, 0, 1, 0],
+                                 [0, 0, 0, 1]])
+        combo = np.matmul(tireTranslation, tireRotation)
+        self.push_model_matrix(np.transpose(combo))
+        self.tire.render(self.get_model_matrix(), color=np.array([0, 0, 255]))
+        self.pop_model_matrix()
+
+    def drawBackRightTire(self):
+        tireTranslation = np.array([[1, 0, 0, self.carx - self.wheelOffsetLength],
+                                    [0, 1, 0, self.wheely],
+                                    [0, 0, 1, self.carz - self.wheelOffsetWidth],
+                                    [0, 0, 0, 1]])
+        tireRotation = np.array([[np.cos(-self.tireAngle), -np.sin(-self.tireAngle), 0, 0],
+                                 [np.sin(-self.tireAngle), np.cos(-self.tireAngle), 0, 0],
+                                 [0, 0, 1, 0],
+                                 [0, 0, 0, 1]])
+        combo = np.matmul(tireTranslation, tireRotation)
+        self.push_model_matrix(np.transpose(combo))
+        self.tire.render(self.get_model_matrix(), color=np.array([0, 0, 255]))
+        self.pop_model_matrix()
+
+    def drawTires(self):
+        self.drawFrontLeftTire()
+        self.drawFrontRightTire()
+        self.drawBackLeftTire()
+        self.drawBackRightTire()
+
+
+    def drawCar(self):
+        carTranslation = np.array([[1, 0, 0, self.carx],
+                                  [0, 1, 0, self.cary],
+                                  [0, 0, 1, self.carz],
+                                  [0, 0, 0, 1]])
+        self.push_model_matrix(np.transpose(carTranslation))
+        self.car.render(self.get_model_matrix(), color=np.array([0,255,0]))
+        self.pop_model_matrix()
+        self.drawTires()
+
 
     def render_scene(self, delta_time):
         self.drawHouses()
-
+        self.drawCar()
+        self.carx += 0.05
+        self.tireAngle += 0.05
 
 
 
