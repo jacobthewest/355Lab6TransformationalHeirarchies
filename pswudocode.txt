@@ -1,0 +1,31 @@
+render():
+	self.drawObjects()
+	self.timeUpdate()
+	self.reset() # checks for the h check
+drawObects():
+	push(matrix)
+	draw house
+	pop
+
+	push
+	draw house
+	pop
+	
+	push(car matrix)
+	draw car
+	push(tire matrix)
+	draw tire #z rotation, slide 19. for draw tires in the entirity.
+	push(tire matrix)
+	draw tire
+	push(tire matrix)
+	draw tire
+	push(tire matrix)
+	draw tire
+	pop(car matrix)
+update():
+	self.tireAngle += 0.1
+	self.carx += 1
+reset():
+	if self.presed H:
+		tireAngle = 0
+		carx = 0
