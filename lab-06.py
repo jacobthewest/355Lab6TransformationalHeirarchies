@@ -28,11 +28,11 @@ class Lab6Renderer(Renderer):
             self.xpos += np.cos(self.theta) * 0.2
             self.zpos += np.sin(self.theta) * 0.2
         elif self.key_pressed[self.keys.S]:  # Move back
-            self.zpos -= 0.2
-            self.xpos += 0.2
+            self.zpos -= np.cos(self.theta) * 0.2
+            self.xpos += np.sin(self.theta) * 0.2
         elif self.key_pressed[self.keys.W]:  # Move forward
-            self.zpos += 0.2
-            self.xpos -= 0.2
+            self.zpos += np.cos(self.theta) * 0.2
+            self.xpos -= np.sin(self.theta) * 0.2
         elif self.key_pressed[self.keys.Q]:  # Turn left
             self.theta += 0.05
         elif self.key_pressed[self.keys.E]:  # Turn right
